@@ -1,0 +1,8 @@
+services:
+  gatewayservice:
+    image: itsaniket61/gatewayservice:latest
+    container_name: gatewayservice
+    environment:
+      - PORT=3001
+    expose:
+      - "3001"
