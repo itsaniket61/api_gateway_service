@@ -1,0 +1,26 @@
+[
+    {
+        "url": "/api/crafter/",
+        "auth": true,
+        "creditCheck": false,
+        "proxy": {
+            "target": "http://localhost:8080",
+            "changeOrigin": false,
+            "pathRewrite": {
+                "^/": "/craft/"
+            }
+        }
+    },
+    {
+        "url": "/api/keeper/",
+        "auth": true,
+        "creditCheck": false,
+        "proxy": {
+            "target": "http://localhost:8080",
+            "changeOrigin": false,
+            "pathRewrite": {
+                "^/": "/keeper/"
+            }
+        }
+    }
+]
