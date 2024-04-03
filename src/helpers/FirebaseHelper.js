@@ -17,9 +17,11 @@ const serviceAccount = {
   universe_domain: 'googleapis.com',
 };
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
+if (serviceAccount.project_id) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+}
 
 const firebaseAuth = serviceAccount.project_id ? admin.auth() : null;
 const firebaseDb = serviceAccount.project_id ? admin.firestore() : null;

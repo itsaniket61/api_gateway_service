@@ -2,7 +2,8 @@ services:
   gatewayservice:
     image: itsaniket61/gatewayservice:latest
     container_name: gatewayservice
+    restart: always
     environment:
       - PORT=3001
-    expose:
-      - "3001"
+    ports:
+      - "3001:3001"
