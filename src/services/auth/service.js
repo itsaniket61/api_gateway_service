@@ -6,7 +6,7 @@ const jwtService = require("./JwtService");
 
 dotenv.config();
 
-const usersCollection = firebaseDb.collection(process.env.FIREBASE_DB_NAME||'gateway'+'/auth/users');
+var usersCollection = firebaseDb && firebaseDb.collection(process.env.FIREBASE_DB_NAME||'gateway'+'/auth/users');
 
 const signup = async (email,password) => {
     try {

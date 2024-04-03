@@ -23,7 +23,7 @@ if (serviceAccount.project_id) {
   });
 }
 
-const firebaseAuth = serviceAccount.project_id ? admin.auth() : null;
-const firebaseDb = serviceAccount.project_id ? admin.firestore() : null;
+const firebaseAuth = serviceAccount.project_id && admin.auth();
+const firebaseDb = serviceAccount.project_id && admin.firestore();
 
 module.exports = { firebaseAuth, firebaseDb };
