@@ -2,7 +2,20 @@ services:
   gatewayservice:
     image: itsaniket61/gatewayservice:latest
     container_name: gatewayservice
+    restart: always
     environment:
       - PORT=3001
+      - SECRET_KEY=aniket-secret-key
+      - FIREBASE_CONFIG_PATH=
+    ports:
+      - "3001:3001"
+  crafter:
+    image: itsaniket61/crafter:latest
+    container_name: crafter
     expose:
-      - "3001"
+      - "8080"
+  cloudkeeper:
+    image: itsaniket61/cloudkeeper:latest
+    container_name: cloudkeeper
+    expose:
+      - "8081"
