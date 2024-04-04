@@ -4,7 +4,7 @@ const fs = require('fs');
 
 dotenv.config();
 
-function loadServiceAccount() {
+const loadServiceAccount = ()=> {
   if (process.env.FIREBASE_CONFIG_PATH) {
     const path = process.env.FIREBASE_CONFIG_PATH;
     try {
@@ -42,7 +42,7 @@ while (!serviceAccount && retries < MAX_RETRIES) {
     retries++;
     if (retries === MAX_RETRIES) {
       console.error('Maximum retries reached. Exiting...');
-      process.exit(1);
+      throw new Error('Maximum retries reached. Exiting...');
     } else {
       console.log(`Retrying... Attempt ${retries}/${MAX_RETRIES}`);
     }
@@ -51,7 +51,7 @@ while (!serviceAccount && retries < MAX_RETRIES) {
 
 if (!serviceAccount || !serviceAccount.project_id) {
   console.error('Incomplete service account information');
-  process.exit(1);
+  throw new Error('Incomplete service account information');
 }
 
 admin.initializeApp({
