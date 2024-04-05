@@ -8,7 +8,8 @@ const getToken = async (token) => {
   const {userId} = await verifyToken(token);;
 
   token = generateJwtToken(userId);
-  return { token };
+  const validity = process.env.JWT_VALIDITY || '120000';
+  return { token, validity };
 }
 
 const generateJwtToken = (userId)=>{
