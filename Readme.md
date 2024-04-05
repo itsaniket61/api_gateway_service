@@ -18,3 +18,5 @@ PROXY_CONFIG_PATH = "/path/to/GatewayConfig.json"
 
 ### AUTHENTICATION
 SECRET_KEY = "secret_key"
+JWT_VALIDITY = "36000"
+USERS_DB_COLLECTION_NAME=""
