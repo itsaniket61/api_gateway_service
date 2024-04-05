@@ -6,9 +6,9 @@ const signup = async (req,res)=>{
         const {email,password} = req.body;
         const user = await authService.signup(email,password);
         if(user.error) throw new Error(user.error);
-        return res.json(user).status(201);
+        return res.status(201).json(user);
     } catch (error) {
-        return res.json({ error: error.message }).status(500);
+        return res.status(500).json({ error: error.message });
     } 
 }
 
@@ -17,18 +17,20 @@ const signin = async (req,res)=>{
         const {email,password} = req.body;
         const { token, error } = await authService.signin(email, password);
         if(error) throw new Error(error);
-        return res.json({token}).status(200);
+        return res.status(200).json(token);
     } catch (error) {
-        return res.json({ error: error.message }).status(500);
+        return res.status(500).json({ error: error.message });
     }
 };
 
 const getToken = async (req, res)=>{
     try {
-        const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
-        return res.json(await jwtService.getToken(token)).status(200);
+        let token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+        token = (await jwtService.getToken(token)).token;
+        if(!token) throw new Error('Token not found');
+        return res.status(200).json(token);
     } catch (error) {
-        return res.json({ error: error.message }).status(500);
+        return res.status(500).json({ error: error.message });
     }
 }
 

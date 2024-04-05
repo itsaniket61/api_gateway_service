@@ -16,7 +16,7 @@ const generateJwtToken = (userId)=>{
   });
   const validity = process.env.JWT_VALIDITY || '120000';
   const token = {token: tokenValue, validity: validity};
-  return {token};
+  return token;
 }
 
 const verifyToken = async (token)=>{
