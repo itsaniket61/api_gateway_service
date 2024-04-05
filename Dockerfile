@@ -14,7 +14,7 @@ RUN chmod +x start.sh
 RUN npm install
 
 # Copy the rest of the application code
-COPY . .
+COPY ./src ./src
 
 RUN chmod +x start.sh
 
