@@ -6,17 +6,17 @@ const jwt = require('jsonwebtoken');
 const getToken = async (token) => {
   // Verify the existing token
   const {userId} = await verifyToken(token);;
-
   token = generateJwtToken(userId);
-  const validity = process.env.JWT_VALIDITY || '120000';
-  token = {token: token, validity}
   return { token };
 }
 
 const generateJwtToken = (userId)=>{
-  return jwt.sign({ userId }, process.env.SECRET_KEY, {
+  const tokenValue = jwt.sign({ userId }, process.env.SECRET_KEY, {
     expiresIn: process.env.JWT_VALIDITY || '2m',
   });
+  const validity = process.env.JWT_VALIDITY || '120000';
+  const token = {token: tokenValue, validity: validity};
+  return {token};
 }
 
 const verifyToken = async (token)=>{
