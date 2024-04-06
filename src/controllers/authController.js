@@ -26,6 +26,13 @@ const signin = async (req,res)=>{
 const getToken = async (req, res)=>{
     try {
         let token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+        if (!token && req.cookies.jwtToken) {
+          token = req.cookies.jwtToken;
+        }
+
+        if (!token) {
+          return res.status(401).send('Missing token');
+        }
         token = (await jwtService.getToken(token)).token;
         if(!token) throw new Error('Token not found');
         return res.status(200).json(token);
