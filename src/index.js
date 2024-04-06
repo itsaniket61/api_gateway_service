@@ -4,6 +4,7 @@ const authRouter = require('./routes/authRouter');
 const { setupLogging } = require('./logs/logging');
 const { ROUTES } = require('./routes/routes');
 const authMiddleware = require('./middlewares/authMiddleware');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
