@@ -1,26 +1,34 @@
 const jwtService = require("../services/auth/JwtService");
-
 const authMiddleware = (req, res, next) => {
-    const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
-    
-    if (!token) {
-      return res.status(401).send('Unauthorized');
-    }
+  let token =
+    req.headers.authorization && req.headers.authorization.split(' ')[1];
 
-    jwtService
-      .verifyToken(token)
-      .then((decodedToken) => {
-        // Set userId in response headers
-        const { userId } = decodedToken;
-        req.headers['userid'] = userId;
-        next();
-      })
-      .catch((error) => {
-        console.error('Error verifying token:', error);
-        return res.status(403).send('Forbidden');
-      });
+  if (!token && req.cookies.jwtToken) {
+    token = req.cookies.jwtToken;
+  }
 
+  if (!token) {
+    return res.status(401).send('Missing token');
+  }
+
+  jwtService
+    .verifyToken(token)
+    .then((decodedToken) => {
+      // Set userId in request headers
+      const { userId } = decodedToken;
+      req.headers['userid'] = userId;
+      const newToken = jwtService.generateJwtToken(userId); // Assuming generateToken function exists
+      res.cookie('jwtToken', newToken, { httpOnly: true, secure: true });
+      next();
+    })
+    .catch((error) => {
+      console.error('Error verifying token:', error);
+      return res.status(403).send('Invalid token');
+    });
 };
+
+module.exports = authMiddleware;
+
 
 
 module.exports = authMiddleware;
