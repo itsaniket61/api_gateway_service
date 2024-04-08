@@ -1,4 +1,4 @@
-const { AppConstants } = require("../constants/AppConstants");
+const AppConstants = require("../constants/AppConstants");
 const jwtService = require("../services/auth/JwtService");
 const authMiddleware = (req, res, next) => {
   let token =
