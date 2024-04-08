@@ -8,7 +8,7 @@ dotenv.config();
 
 var usersCollection = firebaseDb && firebaseDb.collection(process.env.USERS_DB_COLLECTION_NAME||'gateway/auth/users');
 
-const signup = async (email,password) => {
+const signup = async (name,email,password) => {
     try {
         const userRecords = (await usersCollection.where('email','==',email).get()).docs;
         if(userRecords.length>0) throw new Error('User already exists');
@@ -17,7 +17,7 @@ const signup = async (email,password) => {
         const hashedPassword = await bcrypt.hash(password,10);
         await usersCollection
           .doc(userId)
-          .set({ email, hashedPassword });
+          .set({ name, email, hashedPassword });
         const token = jwtService.generateJwtToken(userId);
         return ({token, email});
     } catch (error) {

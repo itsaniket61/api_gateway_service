@@ -3,8 +3,8 @@ const authService = require("../services/auth/service");
 
 const signup = async (req,res)=>{
     try {
-        const {email,password} = req.body;
-        const user = await authService.signup(email,password);
+        const {name,email,password} = req.body;
+        const user = await authService.signup(name,email,password);
         if(user.error) throw new Error(user.error);
         return res.status(201).json(user);
     } catch (error) {
