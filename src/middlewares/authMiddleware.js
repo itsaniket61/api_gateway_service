@@ -1,3 +1,4 @@
+const { AppConstants } = require("../constants/AppConstants");
 const jwtService = require("../services/auth/JwtService");
 const authMiddleware = (req, res, next) => {
   let token =
@@ -18,7 +19,7 @@ const authMiddleware = (req, res, next) => {
       const { userId } = decodedToken;
       req.headers['userid'] = userId;
       const newToken = jwtService.generateJwtToken(userId); // Assuming generateToken function exists
-      res.cookie('jwtToken', newToken, { httpOnly: true, secure: true });
+      res.cookie(AppConstants.JWT_KEY_NAME, newToken, { httpOnly: true, secure: true });
       next();
     })
     .catch((error) => {

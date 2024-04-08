@@ -1,3 +1,4 @@
+const { AppConstants } = require("../constants/AppConstants");
 const jwtService = require("../services/auth/JwtService");
 const authService = require("../services/auth/service");
 
@@ -17,7 +18,7 @@ const signin = async (req,res)=>{
         const {email,password} = req.body;
         const { token, error } = await authService.signin(email, password);
         if(error) throw new Error(error);
-        res.cookie('jwtToken', token.token, { maxAge: token.validity, httpOnly: true });
+        res.cookie(AppConstants.JWT_KEY_NAME, token.token, { maxAge: token.validity, httpOnly: true });
         return res.status(200).json(token);
     } catch (error) {
         return res.status(500).json({ error: error.message });
@@ -36,7 +37,7 @@ const getToken = async (req, res)=>{
         }
         token = (await jwtService.getToken(token)).token;
         if(!token) throw new Error('Token not found');
-        res.cookie('jwtToken', token.token, { maxAge: token.validity, httpOnly: true });
+        res.cookie(AppConstants.JWT_KEY_NAME, token.token, { maxAge: token.validity, httpOnly: true });
         return res.status(200).json(token);
     } catch (error) {
         return res.status(500).json({ error: error.message });
