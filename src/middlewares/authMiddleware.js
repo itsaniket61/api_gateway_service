@@ -1,11 +1,12 @@
 const AppConstants = require("../constants/AppConstants");
 const jwtService = require("../services/auth/JwtService");
+const cookieKeyName = AppConstants.JWT_KEY_NAME;
 const authMiddleware = (req, res, next) => {
   let token =
     req.headers.authorization && req.headers.authorization.split(' ')[1];
 
-  if (!token && req.cookies.jwtToken) {
-    token = req.cookies.jwtToken;
+  if (!token && req.cookies[cookieKeyName]) {
+    token = req.cookies[cookieKeyName];
   }
 
   if (!token) {
@@ -18,8 +19,8 @@ const authMiddleware = (req, res, next) => {
       // Set userId in request headers
       const { userId } = decodedToken;
       req.headers['userid'] = userId;
-      const newToken = jwtService.generateJwtToken(userId); // Assuming generateToken function exists
-      res.cookie(AppConstants.JWT_KEY_NAME, newToken, { httpOnly: true, secure: true });
+      const newToken = jwtService.generateJwtToken(userId);
+      res.cookie(cookieKeyName, newToken, { httpOnly: true, secure: true });
       next();
     })
     .catch((error) => {
@@ -27,9 +28,5 @@ const authMiddleware = (req, res, next) => {
       return res.status(403).send('Invalid token');
     });
 };
-
-module.exports = authMiddleware;
-
-
 
 module.exports = authMiddleware;

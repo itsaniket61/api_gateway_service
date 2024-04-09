@@ -28,8 +28,8 @@ const signin = async (req,res)=>{
 const getToken = async (req, res)=>{
     try {
         let token = req.headers.authorization && req.headers.authorization.split(' ')[1];
-        if (!token && req.cookies.jwtToken) {
-          token = req.cookies.jwtToken;
+        if (!token && req.cookies[AppConstants.JWT_KEY_NAME]) {
+          token = req.cookies[AppConstants.JWT_KEY_NAME];
         }
 
         if (!token) {
