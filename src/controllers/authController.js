@@ -13,6 +13,15 @@ const signup = async (req,res)=>{
     } 
 }
 
+const signout = async (req,res)=>{
+    try {
+        res.clearCookie(AppConstants.JWT_KEY_NAME);
+        return res.status(200).json({ message: 'Successfully signed out' });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+};
+
 const signin = async (req,res)=>{
     try {
         const {email,password} = req.body;
@@ -44,6 +53,6 @@ const getToken = async (req, res)=>{
     }
 }
 
-const authController = { signup, signin, getToken };
+const authController = { signup, signin, getToken, signout };
 
 module.exports = authController;

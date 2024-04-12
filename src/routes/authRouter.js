@@ -15,4 +15,8 @@ authRouter.get('/token', async (req, res) => {
   return await authController.getToken(req, res);
 });
 
+authRouter.get('/signout', async (req, res) => {
+  return await authController.signout(req, res);
+});
+
 module.exports = authRouter;
