@@ -1,37 +1,58 @@
+const AppConstants = require("../constants/AppConstants");
 const jwtService = require("../services/auth/JwtService");
 const authService = require("../services/auth/service");
 
 const signup = async (req,res)=>{
     try {
-        const {email,password} = req.body;
-        const user = await authService.signup(email,password);
+        const {name,email,password} = req.body;
+        const user = await authService.signup(name,email,password);
         if(user.error) throw new Error(user.error);
-        return res.json(user).status(201);
+        return res.status(201).json(user);
     } catch (error) {
-        return res.json({ error: error.message }).status(500);
+        return res.status(500).json({ error: error.message });
     } 
 }
+
+const signout = async (req,res)=>{
+    try {
+        res.clearCookie(AppConstants.JWT_KEY_NAME);
+        return res.status(200).json({ message: 'Successfully signed out' });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+};
 
 const signin = async (req,res)=>{
     try {
         const {email,password} = req.body;
         const { token, error } = await authService.signin(email, password);
         if(error) throw new Error(error);
-        return res.json({token}).status(200);
+        res.cookie(AppConstants.JWT_KEY_NAME, token.token, { maxAge: token.validity, httpOnly: true });
+        return res.status(200).json(token);
     } catch (error) {
-        return res.json({ error: error.message }).status(500);
+        return res.status(500).json({ error: error.message });
     }
 };
 
 const getToken = async (req, res)=>{
     try {
-        const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
-        return res.json(await jwtService.getToken(token)).status(200);
+        let token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+        if (!token && req.cookies[AppConstants.JWT_KEY_NAME]) {
+          token = req.cookies[AppConstants.JWT_KEY_NAME];
+        }
+
+        if (!token) {
+          return res.status(401).send('Missing token');
+        }
+        token = (await jwtService.getToken(token)).token;
+        if(!token) throw new Error('Token not found');
+        res.cookie(AppConstants.JWT_KEY_NAME, token.token, { maxAge: token.validity, httpOnly: true });
+        return res.status(200).json(token);
     } catch (error) {
-        return res.json({ error: error.message }).status(500);
+        return res.status(500).json({ error: error.message });
     }
 }
 
-const authController = { signup, signin, getToken };
+const authController = { signup, signin, getToken, signout };
 
 module.exports = authController;
