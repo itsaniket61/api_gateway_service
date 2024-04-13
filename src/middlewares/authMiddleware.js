@@ -20,7 +20,7 @@ const authMiddleware = (req, res, next) => {
       const { userId } = decodedToken;
       req.headers['userid'] = userId;
       const newToken = jwtService.generateJwtToken(userId);
-      res.cookie(cookieKeyName, newToken, { httpOnly: true, secure: true });
+      res.cookie(cookieKeyName, newToken.token, { httpOnly: true, secure: true });
       next();
     })
     .catch((error) => {
