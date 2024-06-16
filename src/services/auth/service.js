@@ -8,8 +8,23 @@ dotenv.config();
 
 var usersCollection = firebaseDb && firebaseDb.collection(process.env.USERS_DB_COLLECTION_NAME||'gateway/auth/users');
 
+const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+const isValidPassword = (password) => {
+  // Example: at least 8 characters
+  return password?.length >= 8;
+};
+
 const signup = async (name,email,password) => {
     try {
+        // Validate values of Name, Email, and Password
+        if(!name || !email || !password) throw new Error("Please enter Name,Email and Password");
+        if(!isValidEmail(email)) throw new Error('Please enter a valid email address');
+        if(!isValidPassword(password)) throw new Error('Please enter Password at least 8 characters or more');
+        
         const userRecords = (await usersCollection.where('email','==',email).get()).docs;
         if(userRecords.length>0) throw new Error('User already exists');
         
